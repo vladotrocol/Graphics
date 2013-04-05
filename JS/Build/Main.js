@@ -11,6 +11,4 @@
 	};
 
 	function TestStuff(){
-		var m1 = new Matrix(10,20);
-		var m2 = new Matrix(10,20);
 	};

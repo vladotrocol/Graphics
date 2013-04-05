@@ -1,15 +1,53 @@
-//Constructor
-	function Vector3D(ux,uy,uz){
-		this.ux = ux;
-		this.uy = uy;
-		this.uz = uz;
+//Constructors
+	function Vector3D(a1,a2,a3){
+		this.type = "vector";
+		//Vector from Void
+		if(arguments.length == 0){
+			this.ux = 0;
+			this.uy = 0;
+			this.uz = 0;
+		}
+		//Vector from 3 constants
+		else if(arguments.length == 3){
+			this.ux = a1;
+			this.uy = a2;
+			this.uz = a3;
+		}
+		else if(arguments.length == 1){
+			//Vector from constant
+			if(typeof a1 === "number"){
+				this.ux = a1;
+				this.uy = a1;
+				this.uz = a1; 
+			}
+			//Vector from Point
+			else if(a1.type == "point"){
+				this.ux = a1.x;
+				this.uy = a1.y;
+				this.uz = a1.z; 
+			}
+			//Vector from Vector
+			else if(a1.type == "vector"){
+				this.ux = a1.ux;
+				this.uy = a1.uy;
+				this.uz = a1.uz;
+			}
+			//Vector from Normal
+			else if(a1.type == "normal"){
+				this.ux = a1.nx;
+				this.uy = a1.ny;
+				this.uz = a1.nz;
+			}
+		}
 	};
 
 // ----------------Prototypes--------------
 
 	//Check if current vector is equal to vector v 
 		Vector3D.prototype.Equals = function(v){
-			if(this.ux==v.ux&&this.uy==v.uy&&this.uz=v.uz){
+			if(this.ux == v.ux && 
+				this.uy == v.uy && 
+				this.uz == v.uz){
 				return true;
 			}
 			else{

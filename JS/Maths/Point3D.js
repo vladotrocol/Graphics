@@ -1,8 +1,32 @@
-//Constructor
-	function Point3D(x,y,z){
-		this.x = x;
-		this.y = y;
-		this.z = z;
+//Constructors
+	function Point3D(a1,a2,a3){
+		this.type = "point";
+		//Point from constant
+		if(arguments.length==1){
+			if(typeof a1 === "number"){
+				this.x = a1;
+				this.y = a1;
+				this.z = a1;
+			}
+		//Point from Point
+			else if(a1.type == "point"){
+				this.x = a1.x;
+				this.y = a1.y;
+				this.z = a1.z;
+			}
+		}
+		//Point from Void
+		else if(arguments.length==0){
+			this.x = 0;
+			this.y = 0;
+			this.z = 0;
+		}
+		//Point from 3 constants
+		else if(arguments.length == 3){
+			this.x = a1;
+			this.y = a2;
+			this.z = a3;
+		}
 	};
 
 //--------------Prototypes-------------------
