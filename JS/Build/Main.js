@@ -1,5 +1,7 @@
 // Variables
 	var canvasHtml;
+//Constants
+var kEpsilon = 0.001;
 
 // Listeners
 	window.onload = ViewDidLoad;
@@ -11,4 +13,6 @@
 	};
 
 	function TestStuff(){
+		var s = new Sphere();
+		console.log(s.color);
 	};

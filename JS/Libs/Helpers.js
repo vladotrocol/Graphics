@@ -25,3 +25,8 @@
 			h=window.innerHeight;
 		ctx.fillRect(x, y, w, h);
 	};
+//Convert RGB values to html format
+	function RgbToHtml(red, green, blue){
+	    var decColor =0x1000000+ blue + 0x100 * green + 0x10000 *red;
+	    return '#'+decColor.toString(16).substr(1);
+	};

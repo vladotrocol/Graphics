@@ -1,3 +1,4 @@
+//This file contains the class deifnition of a ray
 // Constructors
 function Ray3D(a1,a2){
 	this.type = "ray";
@@ -25,5 +26,6 @@ function Ray3D(a1,a2){
 	Ray3D.prototype.Becomes = function(r){
 		this.o = r.o;
 		this.d = r.d;
+		return this;
 	};
 //--------------------Functions-------------------

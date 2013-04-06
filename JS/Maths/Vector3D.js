@@ -1,3 +1,4 @@
+//This file contains the class definition of a 3d Vector
 //Constructors
 	function Vector3D(a1,a2,a3){
 		this.type = "vector";
@@ -83,11 +84,27 @@
 			this.uz = this.uz*s;
 		};
 
-	//Current vector becomes v
-		Vector3D.prototype.Becomes = function(v){
-			this.ux = v.ux;
-			this.uy = v.uy;
-			this.uz = v.uz;
+	//Current vector becomes a
+		Vector3D.prototype.Becomes = function(a){
+			//Assign a Point to current vector
+			if(a.type == "point"){
+				this.ux = a.x;
+				this.uy = a.y;
+				this.uz = a.z;
+			}
+			//Assign a Vector to current vector
+			else if(a.type == "vector"){
+				this.ux = a.ux;
+				this.uy = a.uy;
+				this.uz = a.uz;
+			}
+			//Assign a Normal to current vector
+			else if(a.type == "normal"){
+				this.ux = a.nx;
+				this.uy = a.ny;
+				this.uz = a.nz;
+			}
+			return this;
 		};
 
 	//Negate current vector
@@ -121,6 +138,20 @@
 								this.ux*v.uy-this.uy*v.ux);
 			return r;
 		};
+
+	//Normalize current vector
+		Vector3D.prototype.Normalize = function(){
+			var l = this.Magnitude();
+			this.ux /= l;
+			this.uy /= l;
+			this.uz /= l;
+		};
+
+	//Normalize and return the new vector
+		Vector3D.prototype.Hat = function(){
+			this.Normalize();
+			return this;
+		}
 
 //--------------Prototypes and Points-----------
 	//Add current vector to point p 
@@ -213,4 +244,13 @@
 		function SubtractPointVector(p,v){
 			var r = new Point3D(p.x-v.ux,p.y-v.uy,p.z-v.uz);
 			return r;
+		};
+
+//-------------------Vectors and Matrices----------------
+	//Multiplication between vector v and matrix m
+		function MultiplyMatrixVector(m,v){
+			var temp = new Point3D(m.Get(0,0)*v.ux+m.Get(0,1)*v.uy+m.Get(0,2)*v.uz+m.Get(0,3),
+				m.Get(1,0)*v.ux+m.Get(1,1)*v.uy+m.Get(1,2)*v.uz+m.Get(1,3),
+				m.Get(2,0)*v.ux+m.Get(2,1)*v.uy+m.Get(2,2)*v.uz+m.Get(2,3));
+			return temp;
 		};
