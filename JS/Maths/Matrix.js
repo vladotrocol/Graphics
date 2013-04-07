@@ -1,16 +1,28 @@
 //Contructor
-function Matrix(){
-	this.m = new Array();
-	this.Init();
-}
+function Matrix(m){
+	this.type = "matrix";
+	if(arguments.length == 0){
+		this.m = new Array();
+		this.Init();
+	}
+	else if(arguments.length == 1){
+		this.m = new Array();
+		this.Init(m);
+	}
+};
 
 //----------------------Prototypes----------------------
-//Initialize the matrix with 0s
-	Matrix.prototype.Init = function(){
+//Initialize the matrix 
+	Matrix.prototype.Init = function(m){
 		for(var i=0; i<4; i++){
 			this.m[i] = new Array(); 
 			for(var j=0; j<4; j++){
-				this.m[i][j] = 0;
+				if(arguments.length == 0){
+					this.m[i][j] = 0;
+				}
+				else if (arguments.length == 1){
+					this.m[i][j] = m.Get(i,j);
+				}
 			}
 		}
 	};
@@ -73,6 +85,15 @@ function Matrix(){
 			s+="\n";
 		}
 		console.log(s);
+	};
+
+//Current matrix becomes matrix m
+	Matrix.prototype.Becomes = function(m){
+		for(var i=0;i<4;i++){
+			for(var j=0;j<4;j++){
+				this.Set(i,j,m.Get(i,j));
+			}
+		}
 	};
 
 // ----------------------Functions------------------------

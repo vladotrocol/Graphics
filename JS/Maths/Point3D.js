@@ -65,7 +65,14 @@
 			return Math.sqrt(Math.pow(this.x-p.x,2)+
 			Math.pow(this.y-p.y,2)+
 			Math.pow(this.z-p.z,2));
-		}
+		};
+
+	//Squared distance from current point to point p
+		Point3D.prototype.DistanceSquared = function(p){
+			return (Math.pow(this.x-p.x,2)+
+			Math.pow(this.y-p.y,2)+
+			Math.pow(this.z-p.z,2));
+		};
 
 	//Current point becomes point p
 		Point3D.prototype.Becomes = function(p){
@@ -73,7 +80,22 @@
 			this.y = p.y;
 			this.z = p.z;
 			return this;
-		}
+		};
+
+	//Add vector v to current point
+		Point3D.prototype.AddVector = function(v){
+			return (new Point3D(this.x+v.ux, this.y+v.uy, this.z+v.uz));
+		};
+
+	//Subtract vector v from current point
+		Point3D.prototype.SubtractVector = function(v){
+			return (new Point3D(this.x-v.ux, this.y-v.uy,this.z-v.uz));
+		};
+
+	//Multiplication by constant c
+		Point3D.prototype.MultiplyConstant = function(c){
+			return (new Point3D(this.x*c, this.y*a, this.z*a));
+		};
 //--------------Functions--------------------
 
 	//Add points p1,p2
@@ -93,6 +115,11 @@
 			return Math.sqrt(Math.pow(p1.x-p2.x,2)+
 			Math.pow(p1.y-p2.y,2)+
 			Math.pow(p1.z-p2.z,2));
+		};
+
+	//Multiply constant c by point p
+		function MultiplyConstantPoint(c,p){
+			return (new Point3D(c*p.x, c*p.y, c*p.z));
 		};
 
 	//Multiplication between point p and matrix m

@@ -13,6 +13,4 @@ var kEpsilon = 0.001;
 	};
 
 	function TestStuff(){
-		var s = new Sphere();
-		console.log(s.color);
 	};

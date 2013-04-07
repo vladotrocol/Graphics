@@ -12,6 +12,7 @@
 		if(a.type == "shaderec"){
 			this.hitObj = a.hitObj;
 			this.localHit = a.localHit;
+			this.normal = new Normal3D();
 			this.color = a.color;
 			this.w = a.w;
 		}
