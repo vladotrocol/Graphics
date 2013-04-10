@@ -131,8 +131,13 @@
 		};
 
 	//The dot product of current vector with vector v
-		Vector3D.prototype.Dot = function(v){
-			return this.ux*v.ux+this.uy*v.uy+this.uz*v.uz;
+		Vector3D.prototype.Dot = function(a){
+			if(a.type =="vector"){
+				return this.ux*a.nx+this.uy*a.ny+this.uz*a.nz;
+			}
+			else if(a.type == "normal"){
+				return this.ux*a.nx+this.uy*a.ny+this.uz*a.nz;
+			}
 		};
 
 	//The cross product between current vector and v 

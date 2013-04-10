@@ -10,7 +10,7 @@ var scene;
 
 	function ViewDidLoad(){
 		canvasHtml = document.getElementById("canvas");
-		scene = new CanvasObj(canvasHtml,0,0,20,20,"#eeee77");
+		scene = new CanvasObj(canvasHtml,0,0,50,50,"#eeee77");
 		var world = new World();
 		world.Build();
 		TestStuff();

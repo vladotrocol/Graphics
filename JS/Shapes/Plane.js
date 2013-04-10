@@ -4,8 +4,8 @@ function Plane(a1, a2){
 	this.color = new RgbColor(100,20,150);
 	// Plane from void
 	if(arguments.length == 0){
-		this.o = new Point3D();
-		this.n = new Normal3D();
+		this.o = new Point3D(0.0);
+		this.n = new Normal3D(0.0,1.0,1.0);
 	}
 	//Plane from plane
 	else if(arguments.length == 1){
@@ -20,6 +20,7 @@ function Plane(a1, a2){
 };
 
 //-----------------------Prototypes-----------------------
+Plane.prototype = new GeometricObj;
 
 //Colone current Plane
 	Plane.prototype.Clone = function(){
@@ -33,13 +34,12 @@ function Plane(a1, a2){
 	};
 
 //Does ray r hit current Plane
-	Plane.prototype.Hit = function(r,tmin,sc){
+	Plane.prototype.Hit = function(ray,sr){
 		var t = this.o.Join(ray.o).Dot(this.n)/ray.d.Dot(this.n);
 		if(t>kEpsilon){
-			tmin = t;
-			sr.normal = n;
-			sr.localHit = ray.o.Add(ray.d.Multyply(t));
-			return true;
+			sr.normal = this.n;
+			sr.localHit = ray.o.Add(ray.d.Multiply(t));
+			return {y:true,t:t};
 		}
-		return false;
+		return {y:false,t:0};
 	};

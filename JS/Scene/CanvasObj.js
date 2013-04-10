@@ -26,6 +26,6 @@
 	    this.screen.data[index+0] = c.r;
 	    this.screen.data[index+1] = c.g;
 	    this.screen.data[index+2] = c.b;
-	    this.screen.data[index+3] = 1;
+	    this.screen.data[index+3] = 255;
 	    this.ctx.putImageData(this.screen,0,0);
 	};
