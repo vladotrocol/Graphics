@@ -2,10 +2,11 @@
 //Constructors
 function Sphere(a1,a2){
 	this.type = "sphere";
+	this.color = new RgbColor(255,0,0);
 	//Sphere from void
 	if(arguments.length == 0){
-		this.c = new Point3D();
-		this.r = 1;
+		this.c = new Point3D(200,103,0);
+		this.r = 65;
 	}
 	//Sphere from point and constant
 	else if(arguments.length == 2){
@@ -38,34 +39,33 @@ function Sphere(a1,a2){
 //Check if current sphere is hit by ray r 
 	Sphere.prototype.Hit = function(ray,sr){
 		var t;
+
 		var temp = ray.o.Join(this.c); //Returns Vector
+
 		var a = ray.d.Dot(ray.d); //Scalar
 		var b = temp.Dot(ray.d)*2;
-		var c = temp.Multiply(temp).Subtract(this.r*this.r);
-		var disc = b.Multiply(b).Subtract(a.Multiply(c).Multiply(4));
+		var c = temp.Dot(temp)-(this.r*this.r);
+		var disc = b*b-4*a*c;
 
 		if(disc<0){
 			return false;
 		}
 		else{
 			var e = Math.sqrt(disc);
-			var denom = a.Multiply(2);
-			t = b.Negate().Subtract(e).Divide(denom);
-
+			var denom = a*2;
+			t = (-b-e)/denom;
 			if(t>kEpsilon){
-				tmin = t;
-				sr.normal = (temp+t*ray.d)/this.r;
-				sr.localHit = ray.o+t*ray.d;
+				sr.normal = (temp.Add(ray.d.Multiply(t))).Multiply(1/this.r);
+				sr.localHit = ray.o.Add(ray.d.Multiply(t));
 				return {y:true,t:t};
 			}
 
 			t = (-b+e)/denom;
 
 			if(t>kEpsilon){
-				tmin = t;
-				sr.normal = (temp+t*ray.d)/this.r;
-				sr.localHit = ray.o+t*ray.d;
-				return {y:true,t:t};;
+				sr.normal = (temp.Add(ray.d.Multiply(t))).Multiply(1/this.r);
+				sr.localHit = ray.o.Add(ray.d.Multiply(t));
+				return {y:true,t:t};
 			}
 		}
 		return {y:false,t:0};

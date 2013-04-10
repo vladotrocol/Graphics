@@ -132,8 +132,8 @@
 
 	//The dot product of current vector with vector v
 		Vector3D.prototype.Dot = function(a){
-			if(a.type =="vector"){
-				return this.ux*a.nx+this.uy*a.ny+this.uz*a.nz;
+			if(a.type == "vector"){
+				return this.ux*a.ux+this.uy*a.uy+this.uz*a.uz;
 			}
 			else if(a.type == "normal"){
 				return this.ux*a.nx+this.uy*a.ny+this.uz*a.nz;
