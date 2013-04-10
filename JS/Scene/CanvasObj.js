@@ -19,3 +19,13 @@
 		ResizeCanvas(canvas, this.w, this.h);
 		DrawRect(this.ctx, 0, 0, this.w, this.h, fill);
 	};
+
+// Draw a pixel
+	CanvasObj.prototype.DrawPixel = function(x,y,c){
+		index = (x + y * this.screen.width) * 4;
+	    this.screen.data[index+0] = c.r;
+	    this.screen.data[index+1] = c.g;
+	    this.screen.data[index+2] = c.b;
+	    this.screen.data[index+3] = 1;
+	    this.ctx.putImageData(this.screen,0,0);
+	};

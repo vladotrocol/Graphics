@@ -1,7 +1,7 @@
 function World(){
 	this.type = "world";
 	if(arguments.length == 0){
-		this.background = "white";
+		this.background = new RgbColor(10,100,100);
 		this.tracer = null;
 		this.view = new View();
 		this.plane = new Plane();
@@ -21,8 +21,8 @@ function World(){
 		for(var i=0;i<vres;i++){
 			for(var j=0;j<hres;j++){
 				ray.o = new Point3D(this.pixel*(j-hres/2+0.5),this.pixel*(i-vres/2+0.5),zw);
-				pixelColor = this.tracer.traceRay(ray);
-				this.DisplayPixel(j,i,pixelColor);
+				pixelColor = this.tracer.TraceRay(ray);
+				scene.DrawPixel(j,this.view.vres - i -1,pixelColor*255);
 			}
 		}
 	};
@@ -31,11 +31,30 @@ function World(){
 		this.objects.Add(o);
 	};
 
-	World.prototype.DisplayPixel = function(i,j,c){
-		var y = this.view.vres - i -1;
-		 
+	World.prototype.HitBareBones = function(r){
+		var sr = new ShadeRec(this);
+		var t;
+		var tmin = kHugeValue;
+		var n = this.objects.length;
+		for(var i=0; i < n ;i++){
+			if(this.objects[i].Hit(r,tmin,sr) && (t<tmin)){
+				sr.hitObject = true;
+				tmin = t;
+				sr.color = this.objects[i].getColor();
+			}
+		}
+		return sr;
 	};
 
+	World.prototype.Build = function(){
+		this.view.Hres(200);
+		this.view.Vres(200);
+		this.view.Pixel(1);
+		this.view.Gamma(1);
+		
+		this.tracer = new TraceAll(this);
+		this.Render();
+	};
 
 //--------------------------Functions----------------------------
 
