@@ -10,8 +10,7 @@ function TraceAll(a){
 //-----------------------Prototypes--------------
 TraceAll.prototype.TraceRay = function(r){
 	var sr = new ShadeRec(this.tracer.w.HitBareBones(r));
-	if(sr.hitObject){
-		console.log("Hit");
+	if(sr.hitObj){
 		return sr.color;
 	}
 	else{

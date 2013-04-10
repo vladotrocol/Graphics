@@ -1,11 +1,11 @@
 //This is the class definition of a plane geometric object
 //Constructors
 function Plane(a1, a2){
-	this.color = new RgbColor(100,20,150);
+	this.color = new RgbColor(100,200,150);
 	// Plane from void
 	if(arguments.length == 0){
 		this.o = new Point3D(0.0);
-		this.n = new Normal3D(0.0,1.0,1.0);
+		this.n = new Normal3D(0,1,-0.01);
 	}
 	//Plane from plane
 	else if(arguments.length == 1){

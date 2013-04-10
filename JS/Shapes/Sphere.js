@@ -36,11 +36,11 @@ function Sphere(a1,a2){
 	};
 
 //Check if current sphere is hit by ray r 
-	Sphere.prototype.Hit = function(ray,tmin,sr){
+	Sphere.prototype.Hit = function(ray,sr){
 		var t;
-		var temp = ray.o.Subtract(this.c); //Returns point
-		var a = ray.d.Multiply(ray.d); //
-		var b = temp.Multiply(2).Multiply(ray.d);
+		var temp = ray.o.Join(this.c); //Returns Vector
+		var a = ray.d.Dot(ray.d); //Scalar
+		var b = temp.Dot(ray.d)*2;
 		var c = temp.Multiply(temp).Subtract(this.r*this.r);
 		var disc = b.Multiply(b).Subtract(a.Multiply(c).Multiply(4));
 
@@ -56,7 +56,7 @@ function Sphere(a1,a2){
 				tmin = t;
 				sr.normal = (temp+t*ray.d)/this.r;
 				sr.localHit = ray.o+t*ray.d;
-				return true;
+				return {y:true,t:t};
 			}
 
 			t = (-b+e)/denom;
@@ -65,10 +65,10 @@ function Sphere(a1,a2){
 				tmin = t;
 				sr.normal = (temp+t*ray.d)/this.r;
 				sr.localHit = ray.o+t*ray.d;
-				return true;
+				return {y:true,t:t};;
 			}
 		}
-		return false;
+		return {y:false,t:0};
 	};
 
 	//Set current sphere's center

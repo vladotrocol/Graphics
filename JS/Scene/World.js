@@ -20,9 +20,9 @@ function World(){
 		ray.d = new Vector3D(0.0,0.0,-1.0);
 		for(var i=0;i<vres;i++){
 			for(var j=0;j<hres;j++){
-				ray.o = new Point3D(pixel*(j-hres/2+0.5),pixel*(i-vres/2+0.5),zw);
+				ray.o = new Point3D(pixel*(j-hres/2-0.5),pixel*(i-vres/2+0.5),zw);
 				pixelColor = this.tracer.TraceRay(ray);
-				scene.DrawPixel(j,this.view.vres - i -1,pixelColor);
+				scene.DrawSq(j,this.view.vres - i -1,pixelColor);
 			}
 		}
 	};
@@ -38,20 +38,21 @@ function World(){
 		var n = this.objects.length;
 		for(var i=0; i < n ;i++){
 			var a = this.objects[i].Hit(r,sr);
-			t= a.t;
+			t = a.t;
 			if(a.y && (t<tmin)){
-				sr.hitObject = true;
+				sr.hitObj = true;
 				tmin = t;
 				sr.color = this.objects[i].GetColor();
+				//console.log(sr);
 			}
 		}
-		console.log(sr);
+		//console.log(sr);
 		return sr;
 	};
 
 	World.prototype.Build = function(){
-		this.view.Hres(50);
-		this.view.Vres(50);
+		this.view.Hres(600);
+		this.view.Vres(400);
 		this.view.Pixel(1);
 		this.view.Gamma(1);
 		this.AddObject(this.plane);
