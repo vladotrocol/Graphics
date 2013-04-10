@@ -6,7 +6,7 @@
 			this.hitObj = false;
 			this.localHit = new Point3D();
 			this.normal = new Normal3D();
-			this.color = "black";
+			this.color = new RgbColor();
 			this.w = a;
 		}
 		if(a.type == "shaderec"){

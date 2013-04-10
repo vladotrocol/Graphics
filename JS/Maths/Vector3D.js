@@ -61,6 +61,7 @@
 			this.ux = this.ux+v.ux;
 			this.uy = this.uy+v.uy;
 			this.uz = this.uz+v.uz;
+			return this;
 		};
 
 	//Substract vector v from current vector
@@ -68,20 +69,22 @@
 			this.ux = this.ux-v.ux;
 			this.uy = this.uy-v.uy;
 			this.uz = this.uz-v.uz;
+			return this;
 		};
 
 	//Multiply vector v to current vector
-		Vector3D.prototype.Multiply = function(v){
-			this.ux = this.ux*v.ux;
-			this.uy = this.uy*v.uy;
-			this.uz = this.uz*v.uz;
-		};
-
-	//Scale current vector with s
-		Vector3D.prototype.Scale = function(s){
-			this.ux = this.ux*s;
-			this.uy = this.uy*s;
-			this.uz = this.uz*s;
+		Vector3D.prototype.Multiply = function(a){
+			if(a.type == "vector"){
+				this.ux *= a.ux;
+				this.uy *= a.uy;
+				this.uz *= a.uz;
+			}
+			else if(typeof a === "number"){
+				this.ux *= a;
+				this.uy *= a;
+				this.uz *= a;
+			}
+			return this;
 		};
 
 	//Current vector becomes a
@@ -112,6 +115,7 @@
 			this.ux = -this.ux;
 			this.uy = -this.uy;
 			this.uz = -this.uz;
+			return this;
 		}
 
 	//The Magnitude of the current vector

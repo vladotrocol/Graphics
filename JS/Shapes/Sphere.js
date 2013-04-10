@@ -38,19 +38,19 @@ function Sphere(a1,a2){
 //Check if current sphere is hit by ray r 
 	Sphere.prototype.Hit = function(ray,tmin,sr){
 		var t;
-		var temp = ray.o - this.c;
-		var a = ray.d*ray.d;
-		var b = 2*temp*ray.d;
-		var c = temp*temp - this.r - this.r;
-		var disc = b*b -4*a*c;
+		var temp = ray.o.Subtract(this.c); //Returns point
+		var a = ray.d.Multiply(ray.d); //
+		var b = temp.Multiply(2).Multiply(ray.d);
+		var c = temp.Multiply(temp).Subtract(this.r*this.r);
+		var disc = b.Multiply(b).Subtract(a.Multiply(c).Multiply(4));
 
 		if(disc<0){
 			return false;
 		}
 		else{
 			var e = Math.sqrt(disc);
-			var denom = 2*a;
-			t = (-b-e)/denom;
+			var denom = a.Multiply(2);
+			t = b.Negate().Subtract(e).Divide(denom);
 
 			if(t>kEpsilon){
 				tmin = t;
@@ -79,11 +79,6 @@ function Sphere(a1,a2){
 		else if(arguments.length == 1){
 			this.c = a1;
 		}
-	};
-
-	//Set current sphere's color
-	Sphere.prototype.Color = function(c){
-		this.color = c;
 	};
 
 	//Set current sphere's radius

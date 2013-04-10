@@ -13,9 +13,9 @@ function Tracer(a){
 //Trace a ray
 	Tracer.prototype.TraceRay = function(a1,a2){
 		if(arguments.length == 0){
-			return "black";
+			return new RgbColor();
 		}
 		else if(arguments.length == 2){
-			return "black";
+			return new RgbColor();
 		}
 	};

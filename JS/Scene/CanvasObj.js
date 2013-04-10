@@ -8,9 +8,9 @@
 		this.y = y||0;
 		this.w = w||0;
 		this.h = h||0;
-		this.objects = [];
 		this.ctx =  ContextFor(canvas);
 		this.Init(canvas, fill);
+		this.screen = this.ctx.createImageData(this.h,this.w);
 	};
 
 // Initial set-up of the canvas
