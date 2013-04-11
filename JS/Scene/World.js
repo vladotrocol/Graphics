@@ -16,7 +16,8 @@ function World(){
 		var vres = this.view.vres;
 		var pixel = this.view.pixel;
 		var zw = 100;
-		ray.d = new Vector3D(0.0,0.0,-1.0);
+		ray.d = new Vector3D(camera.ux,camera.uy,camera.uz);
+		var sample = 2;
 		for(var i=0;i<vres;i++){
 			for(var j=0;j<hres;j++){
 				ray.o = new Point3D(pixel*(j-hres/2-0.5),pixel*(i-vres/2+0.5),zw);
