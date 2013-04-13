@@ -64,7 +64,8 @@ function World(){
 
 	World.prototype.Build = function(){
 		// BuildScene1();
-		BuildScene2();
+		// BuildScene2();
+		BuildScene3();
 		this.view.Hres(Width);
 		this.view.Vres(Height);
 		this.view.Pixel(0.5);

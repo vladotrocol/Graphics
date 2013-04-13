@@ -35,7 +35,9 @@ var Width=400, Height=400;
 	};
 
 	document.onkeydown = function(e){
+		console.log(e.keyCode);
 	};
 
 	function TestStuff(){
+
 	};
