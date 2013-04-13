@@ -2,10 +2,10 @@
 //Constructors
 function Sphere(a1,a2){
 	this.type = "sphere";
-	this.color = new RgbColor(255,0,0);
+	this.color = new RgbColor(1,0,0);
 	//Sphere from void
 	if(arguments.length == 0){
-		this.c = new Point3D(200,103,0);
+		this.c = new Point3D();
 		this.r = 65;
 	}
 	//Sphere from point and constant
@@ -46,18 +46,18 @@ function Sphere(a1,a2){
 		var b = temp.Dot(ray.d)*2;
 		var c = temp.Dot(temp)-(this.r*this.r);
 		var disc = b*b-4*a*c;
-
 		if(disc<0){
-			return false;
+			return {y:false, t:0, sr:sr};
 		}
 		else{
 			var e = Math.sqrt(disc);
 			var denom = a*2;
 			t = (-b-e)/denom;
+
 			if(t>kEpsilon){
 				sr.normal = (temp.Add(ray.d.Multiply(t))).Multiply(1/this.r);
 				sr.localHit = ray.o.Add(ray.d.Multiply(t));
-				return {y:true,t:t};
+				return {y:true,t:t, sr:sr};
 			}
 
 			t = (-b+e)/denom;
@@ -65,10 +65,10 @@ function Sphere(a1,a2){
 			if(t>kEpsilon){
 				sr.normal = (temp.Add(ray.d.Multiply(t))).Multiply(1/this.r);
 				sr.localHit = ray.o.Add(ray.d.Multiply(t));
-				return {y:true,t:t};
+				return {y:true,t:t, sr:sr};
 			}
 		}
-		return {y:false,t:0};
+		return {y:false,t:0, sr:sr};
 	};
 
 	//Set current sphere's center

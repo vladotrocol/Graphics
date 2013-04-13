@@ -33,17 +33,18 @@
 //--------------Prototypes-------------------
 	//Add point p to current point
 		Point3D.prototype.Add = function(a){
-			if(a.tyep == "point"){
-				this.x += a.x;
-				this.y += a.y;
-				this.z += a.z;
+			var b = new Point3D(this.x, this.y, this.z);
+			if(a.type == "point"){
+				b.x += a.x;
+				b.y += a.y;
+				b.z += a.z;
 			}
 			else if(a.type == "vector"){
-				this.x += a.ux;
-				this.y += a.uy;
-				this.z += a.uz;
+				b.x += a.ux;
+				b.y += a.uy;
+				b.z += a.uz;
 			}
-			return this;
+			return b;
 		};
 
 	//Add point p from current point

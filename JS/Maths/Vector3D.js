@@ -74,17 +74,18 @@
 
 	//Multiply vector v to current vector
 		Vector3D.prototype.Multiply = function(a){
+			var b = new Vector3D(this.ux, this.uy, this.uz); 
 			if(a.type == "vector"){
-				this.ux *= a.ux;
-				this.uy *= a.uy;
-				this.uz *= a.uz;
+				b.ux *= a.ux;
+				b.uy *= a.uy;
+				b.uz *= a.uz;
 			}
 			else if(typeof a === "number"){
-				this.ux *= a;
-				this.uy *= a;
-				this.uz *= a;
+				b.ux *= a;
+				b.uy *= a;
+				b.uz *= a;
 			}
-			return this;
+			return b;
 		};
 
 	//Current vector becomes a

@@ -38,5 +38,5 @@
 	};
 
 	CanvasObj.prototype.DrawSq = function(x,y,c){
-		DrawRect(this.ctx,x,y,1,1,RgbToHtml(c.r,c.g,c.b));
+		DrawRect(this.ctx,x,y,1,1,RgbToHtml(parseInt(c.r*255),parseInt(c.g*255),parseInt(c.b*255)));
 	};

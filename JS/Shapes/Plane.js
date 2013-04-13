@@ -1,7 +1,7 @@
 //This is the class definition of a plane geometric object
 //Constructors
 function Plane(a1, a2){
-	this.color = new RgbColor(100,200,150);
+	this.color = new RgbColor(0.6,0.8,0.5);
 	// Plane from void
 	if(arguments.length == 0){
 		this.o = new Point3D(0.0);
@@ -39,7 +39,7 @@ Plane.prototype = new GeometricObj;
 		if(t>kEpsilon){
 			sr.normal = this.n;
 			sr.localHit = ray.o.Add(ray.d.Multiply(t));
-			return {y:true,t:t};
+			return {y:true,t:t, sr:sr};
 		}
-		return {y:false,t:0};
+		return {y:false,t:0, sr:sr};
 	};

@@ -82,6 +82,10 @@ function RgbColor(a1,a2,a3){
 			}
 		};
 
+		RgbColor.prototype.Pow = function(p){
+			return new RgbColor(Math.pow(this.r,p),Math.pow(this.g,p),Math.pow(this.b,p));
+		};
+
 	//Is current color equal to color rgb
 		RgbColor.prototype.Equals = function(rgb){
 			if(this.r == rgb.r && this.g == rgb.g && this.b == rgb.b){

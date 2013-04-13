@@ -17,16 +17,25 @@ function World(){
 		var pixel = this.view.pixel;
 		var zw = 100;
 		ray.d = new Vector3D(camera.ux,camera.uy,camera.uz);
+		
 		var sample = 2;
+		console.log("finished building the world");
 		for(var i=0;i<vres;i++){
 			for(var j=0;j<hres;j++){
 				ray.o = new Point3D(pixel*(j-hres/2-0.5),pixel*(i-vres/2+0.5),zw);
-				//if(i==0&&j==0)
-				//console.log(ray.o);
 				pixelColor = this.tracer.TraceRay(ray);
-				scene.DrawSq(j,this.view.vres - i -1,pixelColor);
+					var mappedColor = new RgbColor();
+					if (this.view.gammutShow)
+						mappedColor = ClampToColor(pixelColor);
+					else
+						mappedColor = MaxToOne(pixelColor);
+	
+					if (this.view.gamma != 1.0)
+						mappedColor = mappedColor.Pow(this.view.invsGamma);
+				scene.DrawSq(j,vres -i -1,mappedColor);
 			}
 		}
+		console.log("finished render");
 	};
 
 	World.prototype.AddObject = function(o){
@@ -40,25 +49,26 @@ function World(){
 		var n = this.objects.length;
 		for(var i=0; i < n ;i++){
 			var a = this.objects[i].Hit(r,sr);
+
 			t = a.t;
+
 			if(a.y && (t<tmin)){
-				sr.hitObj = true;
+				a.sr.hitObj = true;
 				tmin = t;
-				sr.color = this.objects[i].GetColor();
-				//console.log(sr.color.r);
+				a.sr.color = this.objects[i].GetColor();
+				sr=a.sr;
 			}
 		}
-		//console.log(sr);
 		return sr;
 	};
 
 	World.prototype.Build = function(){
-		this.view.Hres(600);
-		this.view.Vres(400);
-		this.view.Pixel(1);
+		// BuildScene1();
+		BuildScene2();
+		this.view.Hres(Width);
+		this.view.Vres(Height);
+		this.view.Pixel(0.5);
 		this.view.Gamma(1);
-		this.AddObject(new Plane());
-		this.AddObject(new Sphere());
 		this.tracer = new TraceAll(this);
 		this.Render();
 	};
