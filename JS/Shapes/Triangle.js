@@ -1,4 +1,5 @@
 function Triangle(a1, a2, a3){
+	this.gtype = "triangle";
 	if(arguments.length == 0){
 		this.v0  = new Point3D(0);
 		this.v1  = new Point3D(0,0,1);

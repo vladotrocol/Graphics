@@ -3,6 +3,28 @@ function BuildScene2(){
 	Height = 400;
 	ResizeCanvas(scene, Width, Height);
 
+	var p1 = new Plane(new Point3D(0,-100,0),new Normal3D(0,1,-0.1));
+	p1.SetColor(0.2, 0.5, 0.1);
+	world.AddObject(p1);
+
+	var t1 = new Triangle(new Point3D(-200,-90,-200),
+		new Point3D(-100, 0,-200),
+		new Point3D(0,-90,-200));
+	t1.SetColor(1,0.6,0);
+	world.AddObject(t1);
+
+	var t3 = new Triangle(new Point3D(-300,-90,-190),
+		new Point3D(-200, 0,-190),
+		new Point3D(-100,-90,-190));
+	t3.SetColor(1,0.9,0);
+	world.AddObject(t3);
+
+	var t2 = new Triangle(new Point3D(-50,-90,-250),
+		new Point3D(150, 100,-250),
+		new Point3D(300,-90,-250));
+	t2.SetColor(1,0.3,0);
+	world.AddObject(t2);
+
 	var s1 = new Sphere(new Point3D(5,3,0),30);
 	s1.SetColor(1,1,0);
 	world.AddObject(s1);

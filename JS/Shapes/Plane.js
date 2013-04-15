@@ -1,6 +1,7 @@
 //This is the class definition of a plane geometric object
 //Constructors
 function Plane(a1, a2){
+	this.gtype = "plane";
 	this.color = new RgbColor(0.6,0.8,0.5);
 	// Plane from void
 	if(arguments.length == 0){

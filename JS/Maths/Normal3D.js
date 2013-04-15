@@ -110,6 +110,10 @@ function Normal3D(a1, a2, a3){
 				return (new Normal3D(this.nx*a, this.ny*a, this.nz*a));
 			}
 		};
+
+		Normal3D.prototype.ToVector = function(){
+			return (new Vector3D(this));
+		}
 //---------------------Functions--------------------
 	//Multiplication between normal n and matrix m
 		function MultiplyMatrixNormal(m,n){

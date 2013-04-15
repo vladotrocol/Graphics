@@ -4,6 +4,7 @@ function World(){
 		this.background = new RgbColor(0,0,0);
 		this.tracer = null;
 		this.view = new View();
+		this.ambient = new Ambient();
 		this.objects = new Array();
 	}
 };
@@ -32,6 +33,7 @@ function World(){
 	
 					if (this.view.gamma != 1.0)
 						mappedColor = mappedColor.Pow(this.view.invsGamma);
+
 				scene.DrawSq(j,vres -i -1,mappedColor);
 			}
 		}
@@ -47,6 +49,7 @@ function World(){
 		var tmin = kHugeValue;
 		var t;
 		var n = this.objects.length;
+		var closest;
 		for(var i=0; i < n ;i++){
 			var a = this.objects[i].Hit(r,sr);
 
@@ -55,7 +58,27 @@ function World(){
 			if(a.y && (t<tmin)){
 				a.sr.hitObj = true;
 				tmin = t;
+				if(this.objects[i].gtype == "sphere"){
+				
+					var theta = this.objects[i].GetSurfaceNormal(a.sr.localHit).Hat().Dot(r.d);
+					a.sr.color = this.objects[i].GetColor().Multiply(theta);
+			}
+			else if(this.objects[i].gtype == "triangle"){
+				var theta = this.objects[i].n.ToVector().Hat().Dot(r.d);
+				a.sr.color = this.objects[i].GetColor().Multiply(theta);
+			}
+			else if(this.objects[i].gtype == "plane"){
 				a.sr.color = this.objects[i].GetColor();
+			}
+			//Add Ambient Light
+			//if(i==0)
+			//console.log(this.ambient.i);
+			a.sr.color = a.sr.color.Add(this.ambient.color.Multiply(this.ambient.i));
+
+			//Depth
+				// var c = r.o.Distance(a.sr.localHit)/300;//BnW
+				 // a.sr.color = (new RgbColor(1)).Add(-t/300); //BnW
+
 				sr=a.sr;
 			}
 		}
@@ -64,12 +87,14 @@ function World(){
 
 	World.prototype.Build = function(){
 		// BuildScene1();
-		// BuildScene2();
-		BuildScene3();
+		BuildScene2();
+		// BuildScene3();
 		this.view.Hres(Width);
 		this.view.Vres(Height);
-		this.view.Pixel(0.5);
+		this.view.Pixel(1);
 		this.view.Gamma(1);
+		this.ambient.i = 0.1;
+		this.ambient.color = new RgbColor(1,1,1);
 		this.tracer = new TraceAll(this);
 		this.Render();
 	};
@@ -88,10 +113,15 @@ function World(){
 
 	function ClampToColor(rgb){
 		var c = new RgbColor(rgb);
-		if(c.r>1||c.g>1||c.b>1){
-			c.r = 1;
-			c.g = 0;
-			c.b = 0;
+		if(c.r>1){
+			c.r =1;
 		}
+		if(c.g>1){
+			c.g =1;
+		}
+		if(c.b>1){
+			c.b =1;
+		}
+
 		return c;
 	};

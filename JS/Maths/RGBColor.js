@@ -40,10 +40,19 @@ function RgbColor(a1,a2,a3){
 
 	//Add color rgb to current color
 		RgbColor.prototype.Add = function(rgb){
-			this.r += rgb.r;
-			this.g += rgb.g;
-			this.b += rgb.b;
-			return this;
+			var b = new RgbColor(this);
+			if(typeof rgb === "number"){
+				b.r += rgb;
+				b.g += rgb;
+				b.b += rgb;
+				return b;
+			}
+			else if(rgb.type == "color"){
+				b.r += rgb.r;
+				b.g += rgb.g;
+				b.b += rgb.b;
+				return b;
+			}
 		};
 
 	//Subtract color rgb from current color
@@ -56,16 +65,18 @@ function RgbColor(a1,a2,a3){
 
 	//Multiply current color by a 
 		RgbColor.prototype.Multiply = function(a){
+			var temp = new RgbColor(this);
 			if(typeof a === "number"){
-				this.r *= a;
-				this.g *= a;
-				this.b *= a;
+				temp.r *= a;
+				temp.g *= a;
+				temp.b *= a;
 			}
 			else if(a.type == "color"){
-				this.r *= a.r;
-				this.g *= a.g;
-				this.b *= a.b;
+				temp.r *= a.r;
+				temp.g *= a.g;
+				temp.b *= a.b;
 			}
+			return temp;
 		};
 
 	//Divide current color by a 

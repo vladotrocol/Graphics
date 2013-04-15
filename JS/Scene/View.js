@@ -5,7 +5,7 @@ function View(a){
 		this.pixel = 1;
 		this.gamma = 1;
 		this.invsGamma = 1;
-		this.gammutShow = false;
+		this.gammutShow = true;
 	}
 	else if(arguments.length == 1){
 		this.hres = a.hres;

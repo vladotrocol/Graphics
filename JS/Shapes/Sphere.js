@@ -1,21 +1,21 @@
 //This file contains the class definition of a sphere object
 //Constructors
 function Sphere(a1,a2){
-	this.type = "sphere";
+	this.gtype = "sphere";
 	this.color = new RgbColor(1,0,0);
 	//Sphere from void
 	if(arguments.length == 0){
-		this.c = new Point3D();
+		this.o = new Point3D();
 		this.r = 65;
 	}
 	//Sphere from point and constant
 	else if(arguments.length == 2){
-		this.c = a1;
+		this.o = a1;
 		this.r = a2;
 	}
 	//Sphere from sphere
 	else if(arguments.length == 1){
-		this.c = a1.c;
+		this.o = a1.o;
 		this.r = a1.r;
 	}
 };
@@ -31,7 +31,7 @@ function Sphere(a1,a2){
 
 //Current sphere becomes sphere
 	Sphere.prototype.Becomes = function(s){
-		this.c = s.c;
+		this.o = s.o;
 		this.r = s.r;
 		return this;
 	};
@@ -40,7 +40,7 @@ function Sphere(a1,a2){
 	Sphere.prototype.Hit = function(ray,sr){
 		var t;
 
-		var temp = ray.o.Join(this.c); //Returns Vector
+		var temp = ray.o.Join(this.o); //Returns Vector
 
 		var a = ray.d.Dot(ray.d); //Scalar
 		var b = temp.Dot(ray.d)*2;
@@ -74,14 +74,18 @@ function Sphere(a1,a2){
 	//Set current sphere's center
 	Sphere.prototype.Center = function(a1,a2,a3){
 		if(arguments.length == 3){
-			this.c = new Point3D(a1,a2,a3);
+			this.o = new Point3D(a1,a2,a3);
 		}
 		else if(arguments.length == 1){
-			this.c = a1;
+			this.o = a1;
 		}
 	};
 
 	//Set current sphere's radius
 	Sphere.prototype.Radius = function(r){
 		this.r = r;
+	};
+
+	Sphere.prototype.GetSurfaceNormal = function(surfacePoint){
+		return (this.o.Join(surfacePoint)); 
 	};

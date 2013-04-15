@@ -2,7 +2,7 @@ function BuildScene3(){
 	Width = 400;
 	Height = 400;
 	ResizeCanvas(scene, Width, Height);
-	GenerateSquares(20);
+	GenerateSquares(40);
 };
 
 function GenerateSquare(s,offsetX, offsetY,depth){
