@@ -4,7 +4,7 @@ function Ambient(a){
 		this.i = 0;
 		this.color = new RgbColor(1);
 	}
-	else if(arguments.length ==1){
+	else if(arguments.length == 1){
 		this.light = a;
 		this.i = a.i;
 		this.color = a.color;

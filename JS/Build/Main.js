@@ -4,7 +4,7 @@
 var kEpsilon = 0.00001;
 var kHugeValue	= 1.0E10;
 var scene;
-var camera = {x:0,y:0,z:0, ux:0,uy:0,uz:-1};
+var camera = {x:0,y:0,z:600, d:500, ux:0,uy:0,uz:0};
 var world;
 var Width=400, Height=400;
 // Listeners
@@ -35,7 +35,28 @@ var Width=400, Height=400;
 	};
 
 	document.onkeydown = function(e){
-		//console.log(e.keyCode);
+		console.log(e.keyCode);
+		if(e.keyCode == "38"){
+			camera.uy-=10;
+			world.Render();
+		}
+		else if(e.keyCode == "40"){
+			camera.uy+=10;
+			world.Render();
+		}
+		else if(e.keyCode == "37"){
+			camera.ux-=10;
+			world.Render();
+		}
+		else if(e.keyCode == "39"){
+			camera.ux+=10;
+			world.Render();
+		}
+		else if(e.keyCode == "221"){
+			camera.d+=10;
+			camera.uz+=10;
+			world.Render();
+		}
 	};
 
 	function TestStuff(){

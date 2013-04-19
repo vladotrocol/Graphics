@@ -2,6 +2,10 @@ function BuildScene3(){
 	Width = 400;
 	Height = 400;
 	ResizeCanvas(scene, Width, Height);
+	var d = new Directional();
+	d.d = new Vector3D(0,0,-1);
+	d.i = 0.7;
+	world.lights.push(d);
 	GenerateSquares(40);
 };
 

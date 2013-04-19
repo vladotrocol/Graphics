@@ -6,6 +6,7 @@ function World(){
 		this.view = new View();
 		this.ambient = new Ambient();
 		this.objects = new Array();
+		this.lights = new Array(); 
 	}
 };
 
@@ -16,14 +17,14 @@ function World(){
 		var hres = this.view.hres;
 		var vres = this.view.vres;
 		var pixel = this.view.pixel;
-		var zw = 100;
-		ray.d = new Vector3D(camera.ux,camera.uy,camera.uz);
+		ray.o = new Point3D(camera.x,camera.y,camera.z);
 		
 		var sample = 2;
 		console.log("finished building the world");
 		for(var i=0;i<vres;i++){
 			for(var j=0;j<hres;j++){
-				ray.o = new Point3D(pixel*(j-hres/2-0.5),pixel*(i-vres/2+0.5),zw);
+				ray.d = new Vector3D(pixel*(j-hres/2-0.5)+camera.ux,pixel*(i-vres/2+0.5)+camera.uy,-camera.d+camera.uz);
+				ray.d.Normalize();
 				pixelColor = this.tracer.TraceRay(ray);
 					var mappedColor = new RgbColor();
 					if (this.view.gammutShow)
@@ -60,19 +61,17 @@ function World(){
 				tmin = t;
 				if(this.objects[i].gtype == "sphere"){
 				
-					var theta = this.objects[i].GetSurfaceNormal(a.sr.localHit).Hat().Dot(r.d);
-					a.sr.color = this.objects[i].GetColor().Multiply(theta);
+					var theta = this.objects[i].GetSurfaceNormal(a.sr.localHit).Hat().Dot(this.lights[0].d);
+					a.sr.color = this.objects[i].GetColor().Multiply(theta*this.lights[0].i);
 			}
 			else if(this.objects[i].gtype == "triangle"){
-				var theta = this.objects[i].n.ToVector().Hat().Dot(r.d);
-				a.sr.color = this.objects[i].GetColor().Multiply(theta);
+				var theta = this.objects[i].n.ToVector().Hat().Dot(this.lights[0].d);
+				a.sr.color = this.objects[i].GetColor().Multiply(theta*this.lights[0].i);
 			}
 			else if(this.objects[i].gtype == "plane"){
-				a.sr.color = this.objects[i].GetColor();
+				a.sr.color = this.objects[i].GetColor().Multiply(this.lights[0].i);
 			}
 			//Add Ambient Light
-			//if(i==0)
-			//console.log(this.ambient.i);
 			a.sr.color = a.sr.color.Add(this.ambient.color.Multiply(this.ambient.i));
 
 			//Depth

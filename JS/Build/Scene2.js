@@ -3,6 +3,11 @@ function BuildScene2(){
 	Height = 400;
 	ResizeCanvas(scene, Width, Height);
 
+	var d = new Directional();
+	d.d = new Vector3D(1,-0.5,-1);
+	d.i = 0.9;
+	world.lights.push(d);
+
 	var p1 = new Plane(new Point3D(0,-100,0),new Normal3D(0,1,-0.1));
 	p1.SetColor(0.2, 0.5, 0.1);
 	world.AddObject(p1);
