@@ -9,7 +9,6 @@ function World(){
 		this.lights = new Array(); 
 	}
 };
-
 //-----------------------------Prototypes---------------------------------
 	World.prototype.Render = function(){
 		var pixelColor = new RgbColor();
@@ -36,7 +35,6 @@ function World(){
 	
 					if (this.view.gamma != 1.0)
 						mappedColor = mappedColor.Pow(this.view.invsGamma);
-
 				scene.DrawSq(j,vres -i -1,mappedColor);
 			}
 		}
@@ -53,6 +51,11 @@ function World(){
 		var t;
 		var n = this.objects.length;
 		var closest;
+		var pointLightDirection;
+		var delta;
+		var normal;
+		var basecolor;
+
 		for(var i=0; i < n ;i++){
 			var a = this.objects[i].Hit(r,sr);
 
@@ -61,53 +64,41 @@ function World(){
 			if(a.y && (t<tmin)){
 				a.sr.hitObj = true;
 				tmin = t;
+
 				if(this.objects[i].gtype == "sphere"){
-					var sphereNormal =  this.objects[i].GetSurfaceNormal(a.sr.localHit).Hat();
-					var baseColor = this.objects[i].GetColor().Multiply(this.ambient.color.Multiply(this.ambient.i*(r.d.Dot(sphereNormal))));
-					var pointLightDirection;
-					var delta;
-					for(var j=0;j<this.lights.length;j++){
+					normal =  this.objects[i].GetSurfaceNormal(a.sr.localHit).Hat();		
+				}		
+				else if(this.objects[i].gtype == "triangle"){
+					normal = this.objects[i].n.ToVector().Hat();
+				}
+				else if(this.objects[i].gtype == "plane"){
+					normal = this.objects[i].n.Negate();
+				}
+
+				baseColor=this.objects[i].GetColor().Multiply(this.ambient.color.Multiply(this.ambient.i*(r.d.Dot(normal))));
+
+				for(var j=0;j<this.lights.length;j++){
+					if(this.objects[i].material.type == "lambert"){
 						if(this.lights[j].type == "pointLight"){
 							pointLightDirection = this.lights[j].o.Join(r.o.Add(r.d.Multiply(t))).Hat();
-							delta = pointLightDirection.Dot(sphereNormal.Negate());
+							delta = pointLightDirection.Dot(normal.Negate());
 						}
 						else if(this.lights[j].type == "directional"){
 							pointLightDirection = this.lights[j].d;
-							delta = pointLightDirection.Dot(sphereNormal);
+							delta = pointLightDirection.Dot(normal);
 						}
 						if(delta>0){
-						 baseColor = baseColor.Add(this.objects[i].GetColor().Multiply(this.lights[j].color.Multiply(delta*this.lights[j].i)));
+						 baseColor = baseColor.Add(this.objects[i].GetColor().Multiply(this.lights[j].color.Multiply(this.objects[i].material.kd*delta*this.lights[j].i)));
 						}
 					}
-					a.sr.color = baseColor;
-			}		
-			else if(this.objects[i].gtype == "triangle"){
-					var triangleNormal = this.objects[i].n.ToVector().Hat();
-					var baseColor = this.objects[i].GetColor().Multiply(this.ambient.color.Multiply(this.ambient.i*(r.d.Dot(triangleNormal))));
-					var pointLightDirection;
-					var delta;
-				for(var j=0;j<this.lights.length;j++){
-					if(this.lights[j].type == "pointLight"){
-							pointLightDirection = this.lights[j].o.Join(r.o.Add(r.d.Multiply(t))).Hat();
-							delta = pointLightDirection.Dot(triangleNormal.Negate());
-						}
-						else if(this.lights[j].type == "directional"){
-							pointLightDirection = this.lights[j].d;
-							delta = pointLightDirection.Dot(triangleNormal);
-						}
-						if(delta>0){
-							baseColor = baseColor.Add(this.objects[i].GetColor().Multiply(this.lights[j].color.Multiply(delta*this.lights[j].i)));
-						}
+					else if(this.objects[i].material.type == "glossy"){
+						
+					}
+					else if(this.objects[i].material.type == "glow"){
+						baseColor = baseColor.Add(this.objects[i].GetColor().Multiply(this.lights[j].color.Multiply(this.objects[i].material.glow*this.lights[j].i)));
+					}
 				}
 				a.sr.color = baseColor;
-			}
-			else if(this.objects[i].gtype == "plane"){
-				a.sr.color = this.objects[i].GetColor().Multiply(this.lights[0].i);
-			}
-			//Depth
-				// var c = r.o.Distance(a.sr.localHit)/300;//BnW
-				 // a.sr.color = (new RgbColor(1)).Add(-t/300); //BnW
-
 				sr=a.sr;
 			}
 		}
@@ -120,9 +111,9 @@ function World(){
 		// BuildScene3();
 		this.view.Hres(Width);
 		this.view.Vres(Height);
-		this.view.Pixel(0.4);
+		this.view.Pixel(0.35);
 		this.view.Gamma(1);
-		this.ambient.i = 0.1;
+		this.ambient.i = 0.4;
 		this.ambient.color = new RgbColor(1,1,1);
 		this.tracer = new TraceAll(this);
 		this.Render();
