@@ -1,7 +1,7 @@
 function Ambient(a){
 	if(arguments.length == 0){
 		this.light = new Light();
-		this.i = 0;
+		this.i = 0.1;
 		this.color = new RgbColor(1);
 	}
 	else if(arguments.length == 1){

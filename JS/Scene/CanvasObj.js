@@ -38,14 +38,14 @@
 	};
 
 	CanvasObj.prototype.DrawSq = function(x,y,c){
-		if(c.b<0){
-			c.b=0;
-		}
-		if(c.g<0){
-			c.g=0;
-		}
-		if(c.r<0){
-			c.r=0;
-		}
+		// if(c.b<0){
+		// 	c.b=0;
+		// }
+		// if(c.g<0){
+		// 	c.g=0;
+		// }
+		// if(c.r<0){
+		// 	c.r=0;
+		// }
 		DrawRect(this.ctx,x,y,1,1,RgbToHtml(parseInt(c.r*255),parseInt(c.g*255),parseInt(c.b*255)));
 	};

@@ -81,16 +81,18 @@ function RgbColor(a1,a2,a3){
 
 	//Divide current color by a 
 		RgbColor.prototype.Divide = function(a){
+			var temp = new RgbColor(this);
 			if(typeof a === "number"){
-				this.r /= a;
-				this.g /= a;
-				this.b /= a;
+				temp.r /= a;
+				temp.g /= a;
+				temp.b /= a;
 			}
 			else if(a.type == "color"){
-				this.r /= a.r;
-				this.g /= a.g;
-				this.b /= a.b;
+				temp.r /= a.r;
+				temp.g /= a.g;
+				temp.b /= a.b;
 			}
+			return temp;
 		};
 
 		RgbColor.prototype.Pow = function(p){

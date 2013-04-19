@@ -3,20 +3,27 @@ function BuildScene2(){
 	Height = 400;
 	ResizeCanvas(scene, Width, Height);
 
-	var d = new Directional();
-	d.d = new Vector3D(1,-0.5,-1);
-	d.i = 0.9;
-	world.lights.push(d);
+	// var d = new Directional();
+	// d.d = new Vector3D(1,-0.5,-1);
+	// d.i = 0.2;
+	// d.color = new RgbColor(1);
+	// world.lights.push(d);
+
+	// var d2 = new Directional();
+	// d2.d = new Vector3D(-1,-0.5,-1);
+	// d2.i = 0.2;
+	// d2.color = new RgbColor(0,1,0);
+	// world.lights.push(d2);
 
 	var po = new PointLight();
-	po.o = new Point3D(100,0,0);
-	po.i = 1;
-	po.color = new RgbColor(0,0,1);
+	po.o = new Point3D(100,0,80);
+	po.i = 0.8;
+	po.color = new RgbColor(1);
 	world.lights.push(po);
 
-	var s0 = new Sphere(new Point3D(100,0,0),5);
-	s0.SetColor(1,1,1);
-	world.AddObject(s0);
+	// var s0 = new Sphere(new Point3D(100,0,80),5);
+	// s0.SetColor(1,1,1);
+	// world.AddObject(s0);
 
 	var p1 = new Plane(new Point3D(0,-100,0),new Normal3D(0,1,-0.1));
 	p1.SetColor(0.2, 0.5, 0.1);
