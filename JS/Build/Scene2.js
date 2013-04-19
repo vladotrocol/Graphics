@@ -8,6 +8,16 @@ function BuildScene2(){
 	d.i = 0.9;
 	world.lights.push(d);
 
+	var po = new PointLight();
+	po.o = new Point3D(100,0,0);
+	po.i = 1;
+	po.color = new RgbColor(0,0,1);
+	world.lights.push(po);
+
+	var s0 = new Sphere(new Point3D(100,0,0),5);
+	s0.SetColor(1,1,1);
+	world.AddObject(s0);
+
 	var p1 = new Plane(new Point3D(0,-100,0),new Normal3D(0,1,-0.1));
 	p1.SetColor(0.2, 0.5, 0.1);
 	world.AddObject(p1);

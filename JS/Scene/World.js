@@ -60,9 +60,15 @@ function World(){
 				a.sr.hitObj = true;
 				tmin = t;
 				if(this.objects[i].gtype == "sphere"){
-				
-					var theta = this.objects[i].GetSurfaceNormal(a.sr.localHit).Hat().Dot(this.lights[0].d);
-					a.sr.color = this.objects[i].GetColor().Multiply(theta*this.lights[0].i);
+					var sphereNormal =  this.objects[i].GetSurfaceNormal(a.sr.localHit).Hat();
+					var pointLightDirection = this.lights[1].o.Join(r.o.Add(r.d.Multiply(t))).Hat();
+					var theta =sphereNormal.Dot(this.lights[0].d);
+					// var theta =sphereNormal.Dot(pointLightDirection);
+					var delta = pointLightDirection.Dot(sphereNormal.Negate());
+					a.sr.color = this.objects[i].GetColor().Multiply(theta*(this.lights[0].i));
+					if (delta>0){
+						a.sr.color=a.sr.color.Add(this.lights[1].color.Multiply(delta*this.lights[1].i));
+					}
 			}
 			else if(this.objects[i].gtype == "triangle"){
 				var theta = this.objects[i].n.ToVector().Hat().Dot(this.lights[0].d);
@@ -90,7 +96,7 @@ function World(){
 		// BuildScene3();
 		this.view.Hres(Width);
 		this.view.Vres(Height);
-		this.view.Pixel(1);
+		this.view.Pixel(0.7);
 		this.view.Gamma(1);
 		this.ambient.i = 0.1;
 		this.ambient.color = new RgbColor(1,1,1);
