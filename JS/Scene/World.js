@@ -26,15 +26,20 @@ function World(){
 				ray.d.Normalize();
 				pixelColor = this.tracer.TraceRay(ray);
 					var mappedColor = new RgbColor();
+						if (this.view.gamma != 1.0)
+						pixelColor = pixelColor.Add(this.view.gamma);
 					if (this.view.gammutShow){
 						mappedColor = ClampToColor(pixelColor);
 					}
 					else{
 						mappedColor = MaxToOne(pixelColor);
 					}
-	
-					if (this.view.gamma != 1.0)
-						mappedColor = mappedColor.Pow(this.view.invsGamma);
+					// if(i>200&&i<204&&j>200&&j<204){
+					// 	debug=true;
+					// }
+					// else{
+					// 	debug = false;
+					// }
 				scene.DrawSq(j,vres -i -1,mappedColor);
 			}
 		}
@@ -45,7 +50,7 @@ function World(){
 		this.objects.push(o);
 	};
 
-	World.prototype.HitBareBones = function(r){
+	World.prototype.Raytrace = function(r){
 		var sr = new ShadeRec(this);
 		var tmin = kHugeValue;
 		var t;
@@ -54,8 +59,9 @@ function World(){
 		var pointLightDirection;
 		var delta;
 		var normal;
-		var basecolor;
-
+		var ambient = new RgbColor();
+		var diffuse = new RgbColor();
+		var specular =0;
 		for(var i=0; i < n ;i++){
 			var a = this.objects[i].Hit(r,sr);
 
@@ -72,33 +78,51 @@ function World(){
 					normal = this.objects[i].n.ToVector().Hat();
 				}
 				else if(this.objects[i].gtype == "plane"){
-					normal = this.objects[i].n.Negate();
+					normal = this.objects[i].n.ToVector();
 				}
-
-				baseColor=this.objects[i].GetColor().Multiply(this.ambient.color.Multiply(this.ambient.i*(r.d.Dot(normal))));
+				ambient=this.objects[i].GetColor().Multiply(this.ambient.color.Multiply(this.ambient.i*this.ambient.ka));
+				diffuse = new RgbColor();
+				specular = 0;
+				var L = new RgbColor();
 
 				for(var j=0;j<this.lights.length;j++){
-					if(this.objects[i].material.type == "lambert"){
-						if(this.lights[j].type == "pointLight"){
+					if(this.lights[j].type == "pointLight"){
 							pointLightDirection = this.lights[j].o.Join(r.o.Add(r.d.Multiply(t))).Hat();
+					}
+					else if(this.lights[j].type == "directional"){
+							pointLightDirection = this.lights[j].d.Hat().Negate();
+					}
+					if(this.objects[i].material.type == "lambert"||this.objects[i].material.type == "specular"){
+						if(this.lights[j].type == "pointLight"){
 							delta = pointLightDirection.Dot(normal.Negate());
 						}
 						else if(this.lights[j].type == "directional"){
-							pointLightDirection = this.lights[j].d;
-							delta = pointLightDirection.Dot(normal);
+							delta = pointLightDirection.Negate().Dot(normal);
 						}
 						if(delta>0){
-						 baseColor = baseColor.Add(this.objects[i].GetColor().Multiply(this.lights[j].color.Multiply(this.objects[i].material.kd*delta*this.lights[j].i)));
+						  	L = L.Add(this.lights[j].color.Multiply(this.lights[j].i).Multiply(delta));
+						}
+						else{
+							L = L.Add(new RgbColor(0));
 						}
 					}
-					else if(this.objects[i].material.type == "glossy"){
-						
-					}
 					else if(this.objects[i].material.type == "glow"){
-						baseColor = baseColor.Add(this.objects[i].GetColor().Multiply(this.lights[j].color.Multiply(this.objects[i].material.glow*this.lights[j].i)));
+						diffuse = this.objects[i].GetColor().Multiply(this.lights[j].color.Multiply(this.objects[i].material.glow*this.lights[j].i));
+					}
+					if(this.objects[i].material.type == "specular"){
+						var R = pointLightDirection.Subtract(normal.Multiply(2*(pointLightDirection.Dot(normal))));
+						var V = r.d;
+						var theta = R.Dot(V);
+						if(theta>0){
+							specular += this.objects[i].material.ks*(Math.pow(theta,this.objects[i].material.exp));
+						}
+						else{
+							specular += 0;
+						}
 					}
 				}
-				a.sr.color = baseColor;
+				diffuse = this.objects[i].GetColor().Multiply(this.objects[i].material.kd*invPi);
+				a.sr.color = ambient.Add(diffuse).Add(specular).Multiply(L);
 				sr=a.sr;
 			}
 		}
@@ -107,13 +131,13 @@ function World(){
 
 	World.prototype.Build = function(){
 		// BuildScene1();
-		BuildScene2();
+		BuildScene4();
 		// BuildScene3();
 		this.view.Hres(Width);
 		this.view.Vres(Height);
-		this.view.Pixel(0.35);
+		this.view.Pixel(0.6);
 		this.view.Gamma(1);
-		this.ambient.i = 0.4;
+		this.ambient.i = 1.4;
 		this.ambient.color = new RgbColor(1,1,1);
 		this.tracer = new TraceAll(this);
 		this.Render();

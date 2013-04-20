@@ -3,10 +3,12 @@
 //Constants
 var kEpsilon = 0.00001;
 var kHugeValue	= 1.0E10;
+var invPi = 0.31830988;
 var scene;
 var camera = {x:0,y:0,z:600, d:500, ux:0,uy:0,uz:0};
 var world;
 var Width=400, Height=400;
+var debug = false;
 // Listeners
 	window.onload = ViewDidLoad;
 

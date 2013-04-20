@@ -4,30 +4,37 @@ function BuildScene2(){
 	ResizeCanvas(scene, Width, Height);
 
 	var d = new Directional();
-	d.d = new Vector3D(1,-0.5,-1);
-	d.i = 0.1;
+	d.d = new Vector3D(0,-1,-1);
+	d.i = 0.5;
 	d.color = new RgbColor(1);
 	world.lights.push(d);
 
 	// var d2 = new Directional();
 	// d2.d = new Vector3D(-1,-0.5,-1);
-	// d2.i = 0.2;
+	// d2.i = 0.5;
 	// d2.color = new RgbColor(0,1,0);
 	// world.lights.push(d2);
 
+	var po2 = new PointLight();
+	po2.o = new Point3D(100,0,500);
+	po2.i = 0.5;
+	po2.color = new RgbColor(1);
+	world.lights.push(po2);
+
 	var po = new PointLight();
-	po.o = new Point3D(100,60,200);
+	po.o = new Point3D(-30,100,50);
 	po.i = 0.5;
 	po.color = new RgbColor(1);
 	world.lights.push(po);
 
-	// var s0 = new Sphere(new Point3D(100,0,80),5);
-	// s0.SetColor(1,1,1);
-	// world.AddObject(s0);
-
 	var p1 = new Plane(new Point3D(0,-100,0),new Normal3D(0,1,0));
 	p1.SetColor(0.2, 0.5, 0.1);
-	world.AddObject(p1);
+	// p1.material = new Specular();
+	world.AddObject(p1);	
+
+	// var p1 = new Plane(new Point3D(0,0,-500),new Normal3D(0,1,1));
+	// p1.SetColor(0.1,0.3,0.1);
+	// world.AddObject(p1);
 
 	var t1 = new Triangle(new Point3D(-200,-90,-200),
 		new Point3D(-100, 0,-200),
@@ -49,11 +56,12 @@ function BuildScene2(){
 
 	var s1 = new Sphere(new Point3D(5,3,0),30);
 	s1.SetColor(1,1,0);
-	s1.material = new Glow();
+	s1.material = new Specular();
 	world.AddObject(s1);
 	
-	var s2 = new Sphere(new Point3D(45,-7,60),20);
+	var s2 = new Sphere(new Point3D(45,-7,-60),20);
 	s2.SetColor(0.71, 0.40, 0.16);
+	s2.material = new Specular();
 	world.AddObject(s2);
 
 	var s3 = new Sphere(new Point3D(40,43,-100),17);
