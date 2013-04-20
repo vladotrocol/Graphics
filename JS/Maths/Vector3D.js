@@ -66,10 +66,11 @@
 
 	//Substract vector v from current vector
 		Vector3D.prototype.Subtract = function(v){
-			this.ux = this.ux-v.ux;
-			this.uy = this.uy-v.uy;
-			this.uz = this.uz-v.uz;
-			return this;
+			var temp = new Vector3D(this);
+			temp.ux = temp.ux-v.ux;
+			temp.uy = temp.uy-v.uy;
+			temp.uz = temp.uz-v.uz;
+			return temp;
 		};
 
 	//Multiply vector v to current vector
@@ -113,10 +114,11 @@
 
 	//Negate current vector
 		Vector3D.prototype.Negate = function(){
-			this.ux = -this.ux;
-			this.uy = -this.uy;
-			this.uz = -this.uz;
-			return this;
+			var temp = new Vector3D(this);
+			temp.ux = -temp.ux;
+			temp.uy = -temp.uy;
+			temp.uz = -temp.uz;
+			return temp;
 		}
 
 	//The Magnitude of the current vector

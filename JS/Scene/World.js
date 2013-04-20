@@ -6,9 +6,9 @@ function World(){
 		this.view = new View();
 		this.ambient = new Ambient();
 		this.objects = new Array();
+		this.lights = new Array(); 
 	}
 };
-
 //-----------------------------Prototypes---------------------------------
 	World.prototype.Render = function(){
 		var pixelColor = new RgbColor();
@@ -16,24 +16,30 @@ function World(){
 		var hres = this.view.hres;
 		var vres = this.view.vres;
 		var pixel = this.view.pixel;
-		var zw = 100;
-		ray.d = new Vector3D(camera.ux,camera.uy,camera.uz);
+		ray.o = new Point3D(camera.x,camera.y,camera.z);
 		
 		var sample = 2;
 		console.log("finished building the world");
 		for(var i=0;i<vres;i++){
 			for(var j=0;j<hres;j++){
-				ray.o = new Point3D(pixel*(j-hres/2-0.5),pixel*(i-vres/2+0.5),zw);
+				ray.d = new Vector3D(pixel*(j-hres/2-0.5)+camera.ux,pixel*(i-vres/2+0.5)+camera.uy,-camera.d+camera.uz);
+				ray.d.Normalize();
 				pixelColor = this.tracer.TraceRay(ray);
 					var mappedColor = new RgbColor();
-					if (this.view.gammutShow)
+						if (this.view.gamma != 1.0)
+						pixelColor = pixelColor.Add(this.view.gamma);
+					if (this.view.gammutShow){
 						mappedColor = ClampToColor(pixelColor);
-					else
+					}
+					else{
 						mappedColor = MaxToOne(pixelColor);
-	
-					if (this.view.gamma != 1.0)
-						mappedColor = mappedColor.Pow(this.view.invsGamma);
-
+					}
+					// if(i>200&&i<204&&j>200&&j<204){
+					// 	debug=true;
+					// }
+					// else{
+					// 	debug = false;
+					// }
 				scene.DrawSq(j,vres -i -1,mappedColor);
 			}
 		}
@@ -44,12 +50,18 @@ function World(){
 		this.objects.push(o);
 	};
 
-	World.prototype.HitBareBones = function(r){
+	World.prototype.Raytrace = function(r){
 		var sr = new ShadeRec(this);
 		var tmin = kHugeValue;
 		var t;
 		var n = this.objects.length;
 		var closest;
+		var pointLightDirection;
+		var delta;
+		var normal;
+		var ambient = new RgbColor();
+		var diffuse = new RgbColor();
+		var specular =0;
 		for(var i=0; i < n ;i++){
 			var a = this.objects[i].Hit(r,sr);
 
@@ -59,32 +71,58 @@ function World(){
 				a.sr.hitObj = true;
 				tmin = t;
 
-				//------------------------Material Shading--------------------
-				if(this.objects[i].material.m.type == "lambert"){
-					if(this.objects[i].gtype == "sphere"){
-					
-						var theta = this.objects[i].GetSurfaceNormal(a.sr.localHit).Hat().Dot(new Vector3D(0.3,-1,-0.5));
-						a.sr.color = this.objects[i].GetColor().Multiply(theta).Add(this.objects[i].material.m.kd);
+				if(this.objects[i].gtype == "sphere"){
+					normal =  this.objects[i].GetSurfaceNormal(a.sr.localHit).Hat();		
+				}		
+				else if(this.objects[i].gtype == "triangle"){
+					normal = this.objects[i].n.ToVector().Hat();
+				}
+				else if(this.objects[i].gtype == "plane"){
+					normal = this.objects[i].n.ToVector();
+				}
+				ambient=this.objects[i].GetColor().Multiply(this.ambient.color.Multiply(this.ambient.i*this.ambient.ka));
+				diffuse = new RgbColor();
+				specular = 0;
+				var L = new RgbColor();
+
+				for(var j=0;j<this.lights.length;j++){
+					if(this.lights[j].type == "pointLight"){
+							pointLightDirection = this.lights[j].o.Join(r.o.Add(r.d.Multiply(t))).Hat();
 					}
-					else if(this.objects[i].gtype == "triangle"){
-						var theta = this.objects[i].n.ToVector().Hat().Dot(r.d);
-						a.sr.color = this.objects[i].GetColor().Multiply(theta);
+					else if(this.lights[j].type == "directional"){
+							pointLightDirection = this.lights[j].d.Hat().Negate();
 					}
-					else if(this.objects[i].gtype == "plane"){
-						a.sr.color = this.objects[i].GetColor();
+					if(this.objects[i].material.type == "lambert"||this.objects[i].material.type == "specular"){
+						if(this.lights[j].type == "pointLight"){
+							delta = pointLightDirection.Dot(normal.Negate());
+						}
+						else if(this.lights[j].type == "directional"){
+							delta = pointLightDirection.Negate().Dot(normal);
+						}
+						if(delta>0){
+						  	L = L.Add(this.lights[j].color.Multiply(this.lights[j].i).Multiply(delta));
+						}
+						else{
+							L = L.Add(new RgbColor(0));
+						}
+					}
+					else if(this.objects[i].material.type == "glow"){
+						diffuse = this.objects[i].GetColor().Multiply(this.lights[j].color.Multiply(this.objects[i].material.glow*this.lights[j].i));
+					}
+					if(this.objects[i].material.type == "specular"){
+						var R = pointLightDirection.Subtract(normal.Multiply(2*(pointLightDirection.Dot(normal))));
+						var V = r.d;
+						var theta = R.Dot(V);
+						if(theta>0){
+							specular += this.objects[i].material.ks*(Math.pow(theta,this.objects[i].material.exp));
+						}
+						else{
+							specular += 0;
+						}
 					}
 				}
-				else if(this.objects[i].material.m.type == "plain"){
-					a.sr.color = this.objects[i].GetColor();
-				}
-
-				//---------------------Add Ambient Light-----------------------
-				a.sr.color = a.sr.color.Add(this.ambient.color.Multiply(this.ambient.i));
-
-				//Depth
-					// var c = r.o.Distance(a.sr.localHit)/300;//BnW
-					 // a.sr.color = (new RgbColor(1)).Add(-t/300); //BnW
-
+				diffuse = this.objects[i].GetColor().Multiply(this.objects[i].material.kd*invPi);
+				a.sr.color = ambient.Add(diffuse).Add(specular).Multiply(L);
 				sr=a.sr;
 			}
 		}
@@ -93,13 +131,13 @@ function World(){
 
 	World.prototype.Build = function(){
 		// BuildScene1();
-		BuildScene2();
+		BuildScene4();
 		// BuildScene3();
 		this.view.Hres(Width);
 		this.view.Vres(Height);
-		this.view.Pixel(0.3);
+		this.view.Pixel(0.6);
 		this.view.Gamma(1);
-		this.ambient.i = 0.01;
+		this.ambient.i = 1.4;
 		this.ambient.color = new RgbColor(1,1,1);
 		this.tracer = new TraceAll(this);
 		this.Render();

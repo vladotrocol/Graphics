@@ -1,9 +1,4 @@
-function Lambert(kd){
-	if(arguments.length == 0){
-		this.kd = 0.1;
-	}
-	else if(arguments.length == 1){
-		this.kd = kd;
-	}
+function Lambert(){
 	this.type = "lambert";
+	this.kd = 0.7;
 };

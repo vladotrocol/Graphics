@@ -88,10 +88,8 @@ function Normal3D(a1, a2, a3){
 
 	//Negate current normal
 		Normal3D.prototype.Negate = function(){
-			this.nx = -this.nx;
-			this.ny = -this.ny;
-			this.nz = -this.nz;
-			return this; 
+			var temp = new Normal3D(-this.nx,-this.ny,-this.nz);
+			return temp; 
 		};
 
 	//Add a to current normal
