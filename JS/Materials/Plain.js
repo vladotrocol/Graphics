@@ -1,4 +1,5 @@
 function Glow(){
 	this.type = "glow";
-	this.glow = 1.1;
+	this.glow = 5;
+	this.kd = 1;
 }

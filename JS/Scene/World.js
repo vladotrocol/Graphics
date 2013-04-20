@@ -100,14 +100,18 @@ function World(){
 							delta = pointLightDirection.Negate().Dot(normal);
 						}
 						if(delta>0){
-						  	L = L.Add(this.lights[j].color.Multiply(this.lights[j].i).Multiply(delta));
+							var I;
+							if(this.lights[j].type == "pointLight" && this.lights[j].d!=null){
+								I=this.lights[j].i*(Math.pow(this.lights[j].d.Dot(pointLightDirection),this.lights[j].fallOff));
+							}
+							else{
+								I=this.lights[j].i;
+							}
+						  	L = L.Add(this.lights[j].color.Multiply(I).Multiply(delta));
 						}
 						else{
 							L = L.Add(new RgbColor(0));
 						}
-					}
-					else if(this.objects[i].material.type == "glow"){
-						diffuse = this.objects[i].GetColor().Multiply(this.lights[j].color.Multiply(this.objects[i].material.glow*this.lights[j].i));
 					}
 					if(this.objects[i].material.type == "specular"){
 						var R = pointLightDirection.Subtract(normal.Multiply(2*(pointLightDirection.Dot(normal))));
@@ -135,7 +139,7 @@ function World(){
 		// BuildScene3();
 		this.view.Hres(Width);
 		this.view.Vres(Height);
-		this.view.Pixel(0.6);
+		this.view.Pixel(0.5);
 		this.view.Gamma(1);
 		this.ambient.i = 1.4;
 		this.ambient.color = new RgbColor(1,1,1);

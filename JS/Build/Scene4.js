@@ -4,14 +4,16 @@ function BuildScene4(){
 	ResizeCanvas(scene, Width, Height);
 
 	// var d = new Directional();
-	// d.d = new Vector3D(0,-1,0);
-	// d.i = 0.3;
+	// d.d = new Vector3D(0,-1,-1);
+	// d.i = 0.5;
 	// world.lights.push(d);
 
 	var po = new PointLight();
-	po.o = new Point3D(10,-60,50);
+	po.o = new Point3D(30,-60,100);
 	po.i = 0.8;
 	po.color = new RgbColor(1);
+	po.d = new Vector3D(0,-0.5,1);
+	po.fallOff = 10;
 	world.lights.push(po);
 
 	// var po2 = new PointLight();
@@ -30,8 +32,10 @@ function BuildScene4(){
 	t1.material.exp = 90;
 	world.AddObject(t1);
 
-	// var s0 = new Sphere(new Point3D(100,0,0),5);
+//Point Light Sphere
+	// var s0 = new Sphere(new Point3D(30,-60,100),5);
 	// s0.SetColor(1,1,1);
+	// this.material = new Glow();
 	// world.AddObject(s0);
 
 	// var s1 = new Sphere(new Point3D(50,0,0),30);
@@ -50,6 +54,7 @@ function BuildScene4(){
 	var p1 = new Plane(new Point3D(0,-70,0),new Normal3D(0,0,-1));
 	p1.SetColor(0.2,0.6,0.3);
 	p1.material = new Specular();
+	p1.material.kd =0.2;
 	p1.material.ks = 0.5;
 	 p1.material.exp = 80;
 	world.AddObject(p1);

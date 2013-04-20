@@ -2,7 +2,7 @@
 //Constructors
 function Sphere(a1,a2){
 	this.gtype = "sphere";
-	this.material = new Lambert();
+	this.material = new Specular();
 	this.color = new RgbColor(1,0,0);
 	//Sphere from void
 	if(arguments.length == 0){
