@@ -10,15 +10,15 @@ function BuildScene4(){
 
 	var po = new PointLight();
 	po.o = new Point3D(30,-60,100);
-	po.i = 0.8;
+	po.i = 2;
 	po.color = new RgbColor(1);
-	po.d = new Vector3D(0,-0.5,1);
-	po.fallOff = 10;
+	// po.d = new Vector3D(0,-0.5,1);
+	// po.fallOff = 10;
 	world.lights.push(po);
 
 	// var po2 = new PointLight();
 	// po2.o = new Point3D(-70,0,100);
-	// po2.i = 0.8;
+	// po2.i = 0.5;
 	// po2.color = new RgbColor(1);
 	// world.lights.push(po2);
 
@@ -54,7 +54,7 @@ function BuildScene4(){
 	var p1 = new Plane(new Point3D(0,-70,0),new Normal3D(0,0,-1));
 	p1.SetColor(0.2,0.6,0.3);
 	p1.material = new Specular();
-	p1.material.kd =0.2;
+	p1.material.kd =1;
 	p1.material.ks = 0.5;
 	 p1.material.exp = 80;
 	world.AddObject(p1);

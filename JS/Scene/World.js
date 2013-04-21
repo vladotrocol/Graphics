@@ -55,7 +55,6 @@ function World(){
 		var tmin = kHugeValue;
 		var t;
 		var n = this.objects.length;
-		var closest;
 		var pointLightDirection;
 		var delta;
 		var normal;
@@ -99,7 +98,13 @@ function World(){
 						else if(this.lights[j].type == "directional"){
 							delta = pointLightDirection.Negate().Dot(normal);
 						}
-						if(delta>0){
+						var shadowed = false;
+							var sRay = new Ray3D(a.sr.localHit,pointLightDirection);
+							shadowed = this.lights[j].InShadow(sRay);
+							// if(shadowed){
+							// 	console.log("sfsa");
+							// }
+						if(delta>0&&!shadowed){
 							var I;
 							if(this.lights[j].type == "pointLight" && this.lights[j].d!=null){
 								I=this.lights[j].i*(Math.pow(this.lights[j].d.Dot(pointLightDirection),this.lights[j].fallOff));
@@ -126,7 +131,7 @@ function World(){
 					}
 				}
 				diffuse = this.objects[i].GetColor().Multiply(this.objects[i].material.kd*invPi);
-				a.sr.color = ambient.Add(diffuse).Add(specular).Multiply(L);
+				a.sr.color = ambient.Add(diffuse.Add(specular).Multiply(L));
 				sr=a.sr;
 			}
 		}
@@ -139,9 +144,9 @@ function World(){
 		// BuildScene3();
 		this.view.Hres(Width);
 		this.view.Vres(Height);
-		this.view.Pixel(0.5);
-		this.view.Gamma(1);
-		this.ambient.i = 1.4;
+		this.view.Pixel(0.8);
+		this.view.Gamma(0.1);
+		this.ambient.i = 0.5;
 		this.ambient.color = new RgbColor(1,1,1);
 		this.tracer = new TraceAll(this);
 		this.Render();

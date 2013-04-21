@@ -90,3 +90,32 @@ function Sphere(a1,a2){
 	Sphere.prototype.GetSurfaceNormal = function(surfacePoint){
 		return (this.o.Join(surfacePoint)); 
 	};
+
+		Sphere.prototype.ShadowHit = function(ray){
+		var temp = ray.o.Join(this.o); //Returns Vector
+
+		var a = ray.d.Dot(ray.d); //Scalar
+		var b = temp.Dot(ray.d)*2;
+		var c = temp.Dot(temp)-(this.r*this.r);
+		var disc = b*b-4*a*c;
+		if(disc<0){
+			return {y:false,t:0};
+		}
+		else{
+			var e = Math.sqrt(disc);
+			var denom = a*2;
+
+			t = (-b-e)/denom;
+			if(t>kEpsilon){
+				//console.log(t);
+				return {y:true,t:t};
+			}
+
+			t = (-b+e)/denom;
+		
+			if(t>kEpsilon){
+				return {y:true,t:t};
+			}	
+		}
+		return {y:false,t:0};
+	};
