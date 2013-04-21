@@ -48,8 +48,6 @@ Plane.prototype = new GeometricObj;
 
 	Plane.prototype.ShadowHit = function(ray){
 		var t = ray.o.Join(this.o).Dot(this.n)/ray.d.Dot(this.n);
-		// if(ray.o.Join(this.o)!=0)
-		//console.log(ray.o.Join(this.o).Dot(this.n));
 		if(t>kEpsilon){
 			return {y:true,t:t};
 		}

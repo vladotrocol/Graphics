@@ -34,12 +34,12 @@ function World(){
 					else{
 						mappedColor = MaxToOne(pixelColor);
 					}
-					// if(i>200&&i<204&&j>200&&j<204){
-					// 	debug=true;
-					// }
-					// else{
-					// 	debug = false;
-					// }
+					if(i>200&&i<204&&j>200&&j<204){
+						debug=true;
+					}
+					else{
+						debug = false;
+					}
 				scene.DrawSq(j,vres -i -1,mappedColor);
 			}
 		}
@@ -98,21 +98,20 @@ function World(){
 						else if(this.lights[j].type == "directional"){
 							delta = pointLightDirection.Negate().Dot(normal);
 						}
-						var shadowed = false;
+						if(delta>0){
+							var shadowed = false;
 							var sRay = new Ray3D(a.sr.localHit,pointLightDirection);
-							shadowed = this.lights[j].InShadow(sRay);
-							// if(shadowed){
-							// 	console.log("sfsa");
-							// }
-						if(delta>0&&!shadowed){
-							var I;
-							if(this.lights[j].type == "pointLight" && this.lights[j].d!=null){
-								I=this.lights[j].i*(Math.pow(this.lights[j].d.Dot(pointLightDirection),this.lights[j].fallOff));
-							}
-							else{
-								I=this.lights[j].i;
-							}
-						  	L = L.Add(this.lights[j].color.Multiply(I).Multiply(delta));
+							shadowed = this.lights[j].InShadow(sRay,i);
+							if(!shadowed){
+								var I;
+								if(this.lights[j].type == "pointLight" && this.lights[j].d!=null){
+									I=this.lights[j].i*(Math.pow(this.lights[j].d.Dot(pointLightDirection),this.lights[j].fallOff));
+								}
+								else{
+									I=this.lights[j].i;
+								}
+							  	L = L.Add(this.lights[j].color.Multiply(I).Multiply(delta));
+						  	}
 						}
 						else{
 							L = L.Add(new RgbColor(0));
@@ -140,7 +139,7 @@ function World(){
 
 	World.prototype.Build = function(){
 		// BuildScene1();
-		BuildScene4();
+		BuildScene2();
 		// BuildScene3();
 		this.view.Hres(Width);
 		this.view.Vres(Height);

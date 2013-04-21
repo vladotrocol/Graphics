@@ -9,7 +9,7 @@ function BuildScene4(){
 	// world.lights.push(d);
 
 	var po = new PointLight();
-	po.o = new Point3D(30,-60,100);
+	po.o = new Point3D(90,-60,100);
 	po.i = 2;
 	po.color = new RgbColor(1);
 	// po.d = new Vector3D(0,-0.5,1);
@@ -23,9 +23,9 @@ function BuildScene4(){
 	// world.lights.push(po2);
 
 
-	var t1 = new Triangle(new Point3D(50,100,50),
-		new Point3D(100,-50,0),
-		new Point3D(0,-20,0));
+	var t1 = new Triangle(new Point3D(10,-50,70),
+		new Point3D(30,-10,0),
+		new Point3D(30,-70,0));
 	t1.SetColor(1,0.6,0);
 	t1.material = new Specular();
 	t1.material.ks = 0.5;
@@ -42,16 +42,16 @@ function BuildScene4(){
 	// s1.SetColor(1,0,0);
 	// world.AddObject(s1);
 
-	var s2 = new Sphere(new Point3D(-20,0,0),30);
+	var s2 = new Sphere(new Point3D(-30,-30,20),30);
 	s2.SetColor(1,0,1);
 	s2.material = new Specular();
 	world.AddObject(s2);
 
-	var s3 = new Sphere(new Point3D(-90,0,0),30);
+	var s3 = new Sphere(new Point3D(-90,0,10),30);
 	s3.SetColor(0,1,1);
 	world.AddObject(s3);
 
-	var p1 = new Plane(new Point3D(0,-70,0),new Normal3D(0,0,-1));
+	var p1 = new Plane(new Point3D(50,-70,0),new Normal3D(0,0,-1));
 	p1.SetColor(0.2,0.6,0.3);
 	p1.material = new Specular();
 	p1.material.kd =1;
